@@ -1,5 +1,6 @@
 using EventRegistrationApi_CarlosTelloDominguez.Data;   
 using Microsoft.EntityFrameworkCore;
+using EventRegistrationApi_CarlosTelloDominguez.Services;
 
 namespace EventRegistrationApi_CarlosTelloDominguez
 {
@@ -12,7 +13,9 @@ namespace EventRegistrationApi_CarlosTelloDominguez
             builder.Services.AddControllers();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<IEventService, EventService>();
 
             builder.Services.AddOpenApi();
 
