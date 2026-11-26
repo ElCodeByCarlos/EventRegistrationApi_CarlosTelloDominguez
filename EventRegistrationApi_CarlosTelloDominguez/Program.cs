@@ -2,6 +2,7 @@ using EventRegistrationApi_CarlosTelloDominguez.Data;
 using Microsoft.EntityFrameworkCore;
 using EventRegistrationApi_CarlosTelloDominguez.Services;
 
+
 namespace EventRegistrationApi_CarlosTelloDominguez
 {
     public class Program
@@ -11,6 +12,8 @@ namespace EventRegistrationApi_CarlosTelloDominguez
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+
+            builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -30,6 +33,8 @@ namespace EventRegistrationApi_CarlosTelloDominguez
 
             app.UseAuthorization();
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.MapControllers();
 

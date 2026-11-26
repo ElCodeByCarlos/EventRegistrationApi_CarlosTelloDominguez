@@ -4,40 +4,36 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventRegistrationApi_CarlosTelloDominguez.Controllers
 {
-    public class EventController : Controller
+    [ApiController]
+    [Route("api/[controller]")]   
+    public class EventsController : ControllerBase
     {
-        [ApiController]
-        [Route("api/[controller]")]   // → /api/events
-        public class EventsController : ControllerBase
+        private readonly IEventService _eventService;
+
+        public EventsController(IEventService eventService)
         {
-            private readonly IEventService _eventService;
+            _eventService = eventService;
+        }
 
-            public EventsController(IEventService eventService)
+        
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
+        {
+            var events = await _eventService.GetAllEventsAsync();
+            return Ok(events);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EventDto>> GetEvent(int id)
+        {
+            var eventDto = await _eventService.GetEventByIdAsync(id);
+
+            if (eventDto == null)
             {
-                _eventService = eventService;
+                return NotFound(new { message = $"Event with id {id} was not found." });
             }
 
-            // GET: api/events
-            [HttpGet]
-            public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
-            {
-                var events = await _eventService.GetAllEventsAsync();
-                return Ok(events);
-            }
-
-            // GET: api/events/3
-            [HttpGet("{id}")]
-            public async Task<ActionResult<EventDto>> GetEvent(int id)
-            {
-                var eventDto = await _eventService.GetEventByIdAsync(id);
-
-                if (eventDto == null)
-                {
-                    return NotFound(new { message = $"Event with id {id} was not found." });
-                }
-
-                return Ok(eventDto);
-            }
+            return Ok(eventDto);
         }
     }
 }
