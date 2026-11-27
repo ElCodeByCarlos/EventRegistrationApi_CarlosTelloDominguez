@@ -33,15 +33,20 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Controllers
             }
             return Ok(registration);
         }
+
         [HttpPost("events/{eventId}/registrations")]
         public async Task<ActionResult<RegistrationDto>> CreateRegistration(int eventId, CreateRegistrationDto dto)
         {
-            var createdRegistration = await _registrationService.CreateRegistrationAsync(eventId, dto);
-            if (createdRegistration == null)
+            var result = await _registrationService.CreateRegistrationAsync(eventId, dto);
+
+            return result.Status switch
             {
-                return BadRequest(new { message = "Failed to create registration. Please check the provided data." });
-            }
-            return CreatedAtAction(nameof(GetRegistrationById), new { registrationId = createdRegistration.RegistrationId }, createdRegistration);
+                ServiceResultStatus.Success => Created($"/api/events/{eventId}/registrations", result.Data),
+                ServiceResultStatus.NotFound => NotFound(result.ErrorMessage),
+                ServiceResultStatus.BadRequest => BadRequest(result.ErrorMessage),
+                ServiceResultStatus.Conflict => Conflict(result.ErrorMessage),
+                _ => StatusCode(500)
+            };
         }
         [HttpDelete("registrations/{registrationId}")]
         public async Task<IActionResult> DeleteRegistration(int registrationId)

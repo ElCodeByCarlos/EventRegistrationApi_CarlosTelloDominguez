@@ -50,33 +50,87 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<RegistrationDto?> CreateRegistrationAsync(int eventId, CreateRegistrationDto dto)
+        /*  public async Task<RegistrationDto?> CreateRegistrationAsync(int eventId, CreateRegistrationDto dto)
+          {
+              var existingEvent = await _context.Events.FindAsync(eventId);
+              if (existingEvent == null)
+              {
+                  return null;
+              }
+
+              var registration = new Registration
+              {
+                  EventId = eventId,
+                  StudentName = dto.StudentName,
+                  Email = dto.Email,
+                  RegisteredOn = DateTime.Now  
+              };
+
+              _context.Registrations.Add(registration);
+              await _context.SaveChangesAsync();
+
+              return new RegistrationDto
+              {
+                  RegistrationId = registration.RegistrationId,   
+                  EventTitle = existingEvent.Title,
+                  StudentName = registration.StudentName,
+                  Email = registration.Email,
+                  RegisteredOn = registration.RegisteredOn
+              };
+          }*/
+
+        public async Task<ServiceResult<RegistrationDto>> CreateRegistrationAsync(int eventId, CreateRegistrationDto dto)
         {
+            // Rule 1: Event must exist → 404
             var existingEvent = await _context.Events.FindAsync(eventId);
             if (existingEvent == null)
             {
-                return null;
+                return ServiceResult<RegistrationDto>.NotFound($"Event with id {eventId} was not found.");
             }
 
+            // Rule 2: No past events → 400
+            if (existingEvent.EventDate <= DateTime.Now)
+            {
+                return ServiceResult<RegistrationDto>.BadRequest("Registration is closed for past events.");
+            }
+
+            // Rule 3: No duplicates (case-insensitive) → 409
+            var normalizedEmail = dto.Email.Trim().ToLower();
+            var alreadyRegistered = await _context.Registrations
+                .AnyAsync(r => r.EventId == eventId && r.Email.ToLower() == normalizedEmail);
+
+            if (alreadyRegistered)
+            {
+                return ServiceResult<RegistrationDto>.Conflict("This email is already registered for this event.");
+            }
+
+            // Rule 4: Capacity → 409
+            var registeredCount = await _context.Registrations.CountAsync(r => r.EventId == eventId);
+            if (registeredCount >= existingEvent.Capacity)
+            {
+                return ServiceResult<RegistrationDto>.Conflict("This event is full.");
+            }
+
+            // All rules passed → create the registration
             var registration = new Registration
             {
                 EventId = eventId,
-                StudentName = dto.StudentName,
-                Email = dto.Email,
-                RegisteredOn = DateTime.Now  
+                StudentName = dto.StudentName.Trim(),
+                Email = dto.Email.Trim(),
+                RegisteredOn = DateTime.Now
             };
 
             _context.Registrations.Add(registration);
             await _context.SaveChangesAsync();
 
-            return new RegistrationDto
+            return ServiceResult<RegistrationDto>.Success(new RegistrationDto
             {
-                RegistrationId = registration.RegistrationId,   
+                RegistrationId = registration.RegistrationId,
                 EventTitle = existingEvent.Title,
                 StudentName = registration.StudentName,
                 Email = registration.Email,
                 RegisteredOn = registration.RegisteredOn
-            };
+            });
         }
 
         public async Task<bool> DeleteRegistrationAsync(int registrationId)

@@ -6,7 +6,7 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
     {
         Task<IEnumerable<RegistrationDto>?> GetRegistrationsForEventAsync(int eventId);
         Task<RegistrationDto?> GetRegistrationByIdAsync(int registrationId);
-        Task<RegistrationDto?> CreateRegistrationAsync(int eventId, CreateRegistrationDto dto);
+        Task<ServiceResult<RegistrationDto>> CreateRegistrationAsync(int eventId, CreateRegistrationDto dto);
         Task<bool> DeleteRegistrationAsync(int registrationId);
     }
 }
