@@ -19,6 +19,7 @@ namespace EventRegistrationApi_CarlosTelloDominguez
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 
             builder.Services.AddOpenApi();
 
