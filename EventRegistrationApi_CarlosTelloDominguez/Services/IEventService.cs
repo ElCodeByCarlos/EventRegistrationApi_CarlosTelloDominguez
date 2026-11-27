@@ -6,6 +6,6 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
     {
         Task<IEnumerable<EventDto>> GetAllEventsAsync();
         Task<EventDto?> GetEventByIdAsync(int id);
-            //Error on commited title
+        Task<EventDto> CreateEventAsync(CreateEventDto dto);
     }
 }

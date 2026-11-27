@@ -1,6 +1,7 @@
 ﻿using EventRegistrationApi_CarlosTelloDominguez.DTOs;
 using EventRegistrationApi_CarlosTelloDominguez.Data;
 using Microsoft.EntityFrameworkCore;
+using EventRegistrationApi_CarlosTelloDominguez.Models;
 
 namespace EventRegistrationApi_CarlosTelloDominguez.Services
 {
@@ -44,6 +45,31 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
                     SpotsLeft = e.Capacity - e.Registrations.Count
                 })
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<EventDto> CreateEventAsync(CreateEventDto dto)
+        {
+            var newEvent = new Event
+            {
+                Title = dto.Title,
+                Location = dto.Location,
+                EventDate = dto.EventDate,
+                Capacity = dto.Capacity
+            };
+
+            _context.Events.Add(newEvent);
+            await _context.SaveChangesAsync();
+
+            return new EventDto
+            {
+                EventId = newEvent.EventId,
+                Title = newEvent.Title,
+                Location = newEvent.Location,
+                EventDate = newEvent.EventDate,
+                Capacity = newEvent.Capacity,
+                RegisteredCount = 0,
+                SpotsLeft = newEvent.Capacity
+            };
         }
     }
 }

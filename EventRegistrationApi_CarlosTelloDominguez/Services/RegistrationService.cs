@@ -13,7 +13,7 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<RegistrationDto>?> GetRegistrationForEventAsync(int eventId)
+        public async Task<IEnumerable<RegistrationDto>?> GetRegistrationsForEventAsync(int eventId)
         {
             var eventExists = await _context.Events.AnyAsync(e => e.EventId == eventId);
             if (!eventExists)
@@ -78,5 +78,18 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
                 RegisteredOn = registration.RegisteredOn
             };
         }
+
+        public async Task<bool> DeleteRegistrationAsync(int registrationId)
+        {
+            var registration = await _context.Registrations.FindAsync(registrationId);
+            if (registration == null)
+            {
+                return false;
+            }
+            _context.Registrations.Remove(registration);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

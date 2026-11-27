@@ -35,5 +35,12 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Controllers
 
             return Ok(eventDto);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<EventDto>> CreateEvent(CreateEventDto dto)
+        {
+            var createdEvent = await _eventService.CreateEventAsync(dto);
+            return CreatedAtAction(nameof(GetEvent), new { id = createdEvent.EventId }, createdEvent);
+        }
     }
 }
