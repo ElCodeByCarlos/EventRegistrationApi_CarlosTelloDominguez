@@ -81,20 +81,19 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
 
         public async Task<ServiceResult<RegistrationDto>> CreateRegistrationAsync(int eventId, CreateRegistrationDto dto)
         {
-            // Rule 1: Event must exist → 404
+            
             var existingEvent = await _context.Events.FindAsync(eventId);
             if (existingEvent == null)
             {
                 return ServiceResult<RegistrationDto>.NotFound($"Event with id {eventId} was not found.");
             }
 
-            // Rule 2: No past events → 400
+        
             if (existingEvent.EventDate <= DateTime.Now)
             {
                 return ServiceResult<RegistrationDto>.BadRequest("Registration is closed for past events.");
             }
 
-            // Rule 3: No duplicates (case-insensitive) → 409
             var normalizedEmail = dto.Email.Trim().ToLower();
             var alreadyRegistered = await _context.Registrations
                 .AnyAsync(r => r.EventId == eventId && r.Email.ToLower() == normalizedEmail);

@@ -34,10 +34,11 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Data
                 },
                 new Event
                 {
+                    // to get a true statement the event will happen in 2027
                     EventId = 2,
                     Title = "Swimming WorkShop",
                     Location = "Sheridan College",
-                    EventDate = new DateTime(2026, 6, 7),
+                    EventDate = new DateTime(2027, 6, 7),
                     Capacity = 50
                 },
 
@@ -46,8 +47,8 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Data
                     EventId = 3,
                     Title = "Calculus WorkShop",
                     Location = "UOFT College",
-                    EventDate = new DateTime(2026, 9, 20),
-                    Capacity = 100
+                    EventDate = new DateTime(2027, 9, 20),
+                    Capacity = 2
                 },
 
                 new Event

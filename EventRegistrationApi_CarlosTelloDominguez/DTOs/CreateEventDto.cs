@@ -4,6 +4,8 @@ using EventRegistrationApi_CarlosTelloDominguez.Validation;
 
 namespace EventRegistrationApi_CarlosTelloDominguez.DTOs
 {
+    // I define Client POST request to create an event
+    // Events created into the  DTO
     public class CreateEventDto
     {
         [Required(ErrorMessage = "Title is required.")]

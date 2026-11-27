@@ -5,6 +5,7 @@ using EventRegistrationApi_CarlosTelloDominguez.Models;
 
 namespace EventRegistrationApi_CarlosTelloDominguez.Services
 {
+    // Implements the IEventService interface to provide event-related operations
     public class EventService : IEventService
     {
         private readonly AppDbContext _context;
@@ -14,6 +15,7 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Services
             _context = context;
         }
 
+        // Return all the events , sorted by date
         public async Task<IEnumerable<EventDto>> GetAllEventsAsync()
         {
             return await _context.Events

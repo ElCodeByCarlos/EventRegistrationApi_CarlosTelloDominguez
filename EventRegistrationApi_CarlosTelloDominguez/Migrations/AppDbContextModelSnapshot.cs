@@ -62,15 +62,15 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Migrations
                         {
                             EventId = 2,
                             Capacity = 50,
-                            EventDate = new DateTime(2026, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EventDate = new DateTime(2027, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Location = "Sheridan College",
                             Title = "Swimming WorkShop"
                         },
                         new
                         {
                             EventId = 3,
-                            Capacity = 100,
-                            EventDate = new DateTime(2026, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Capacity = 2,
+                            EventDate = new DateTime(2027, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Location = "UOFT College",
                             Title = "Calculus WorkShop"
                         },

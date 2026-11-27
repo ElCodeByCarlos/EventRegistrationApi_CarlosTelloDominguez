@@ -2,6 +2,7 @@
 
 namespace EventRegistrationApi_CarlosTelloDominguez.Models
 {
+    // Properties of the Event class, which represents an event in the system
     public class Event
     {
         [Key]

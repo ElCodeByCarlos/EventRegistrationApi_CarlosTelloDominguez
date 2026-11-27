@@ -4,18 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EventRegistrationApi_CarlosTelloDominguez.Controllers
 {
+    // activate API behaviour
     [ApiController]
     [Route("api/[controller]")]   
     public class EventsController : ControllerBase
     {
+        // the controller talks to the service layer
         private readonly IEventService _eventService;
 
+        // service through the constructor
         public EventsController(IEventService eventService)
         {
             _eventService = eventService;
         }
 
-        
+        // return all evetns as EventDto
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
         {
@@ -23,6 +26,7 @@ namespace EventRegistrationApi_CarlosTelloDominguez.Controllers
             return Ok(events);
         }
 
+        // Return true events, like OK events otherwise will get 400 
         [HttpGet("{id}")]
         public async Task<ActionResult<EventDto>> GetEvent(int id)
         {

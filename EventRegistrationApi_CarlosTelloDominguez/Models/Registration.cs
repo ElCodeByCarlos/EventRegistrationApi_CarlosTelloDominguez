@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventRegistrationApi_CarlosTelloDominguez.Models
 {
+    // rEGISTRATION CLASS, which represents a registration for an event in the system
     public class Registration
     {
         [Key]
